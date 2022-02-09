@@ -26,7 +26,6 @@ fetch(myRequest)
             if (a.lastname > b.lastname) {return 1;}
             return 0
         })
-        console.log(phonebook)
         phonebook.forEach(function(element){
             var resourcename = document.createElement("h2")
             resourcename.innerHTML = element["name"]
