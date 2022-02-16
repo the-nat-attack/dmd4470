@@ -2,11 +2,69 @@
     margin: 0 auto;
 }
 
+h1{
+    margin-top:20px!important;
+}
+
 #add-new{
     width:100%;
-    position:fixed;
 }
 
 #task-list{
-    margin-top:50px;
+    margin-top:10px;
+}
+
+ul{
+    padding-left:0px!important;
+    padding-top:10px!important;
+}
+
+.fa {
+    cursor:pointer;
+    font-size:20px!important;
+}
+
+.fa-trash{
+    color:#b00c0c;
+    justify-content: flex-end;
+    margin-right:0px;
+    z-index:2;
+}
+
+.fa-circle-o, .fa-check-circle{
+    order: -1;
+    margin-left:0;
+    margin-right:10px;
+    padding-top:3px;
+}
+
+li{
+    padding:10px 20px;
+    background-color:#ededed;
+    margin:10px 0px;
+    display:flex;
+}
+
+#add-new-task-btn{
+    border:none;
+    margin-left:0px;
+    padding:5px 10px;
+    background-color: #3D5AFE;
+    color: #ffffff;
+    margin-left:-5px;
+}
+
+#add-new-task-btn:hover{
+    background-color: #303F9F;
+    transition:0.3s;
+}
+
+#new-task-text{
+    border:none;
+    background-color: #ededed;
+    padding:5px 20px;
+}
+
+#new-task-text:focus-visible{
+    outline:none!important;
 }
