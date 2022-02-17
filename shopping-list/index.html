@@ -52,6 +52,8 @@
       <input id="new-task-text" type="text" placeholder="add new task">
       <button id="add-new-task-btn" type="submit">add</button>
     </div>
+    <button id="az" class="chip chip-active" value="asc">SORT A - Z</button>
+    <button id="za" class="chip" value="desc">SORT Z - A</button>
     <ul id="task-list">
     </ul>
     <h3>Completed Tasks</h3>
@@ -77,7 +79,32 @@
     const pasttasklist = document.querySelector('#past-task-list')
     const newtasktext = document.querySelector('#new-task-text')
     const addnewbtn = document.querySelector('#add-new-task-btn')
-    db.collection("tasks")
+    var az = document.querySelector('#az')
+    var za = document.querySelector('#za')
+
+    if (localStorage.getItem('sortby') === 'desc'){
+      za.classList.add('chip-active')
+      az.classList.remove('chip-active')
+    }
+    else{
+
+    }
+
+    az.addEventListener('click', function(){
+      localStorage.setItem('sortby',"asc")
+      az.classList.add('chip-active')
+      za.classList.remove('chip-active')
+      location.reload()
+    })
+
+    za.addEventListener('click', function(){
+      localStorage.setItem('sortby',"desc")
+      za.classList.add('chip-active')
+      az.classList.remove('chip-active')
+      location.reload()
+    })
+    
+    db.collection("tasks").orderBy("name", localStorage.getItem('sortby'))
     .onSnapshot((querySnapshot) => {
 
         tasklist.innerHTML = ""
@@ -105,8 +132,8 @@
 
         });
     });
-
-    db.collection("completed-tasks")
+    
+    db.collection("completed-tasks").orderBy("name", localStorage.getItem('sortby'))
     .onSnapshot((querySnapshot) => {
 
         pasttasklist.innerHTML = ""
@@ -127,15 +154,26 @@
           deleteicon.addEventListener('click', function(){
             completeddeleteTask(doc.id)
           })
+          checkicon.addEventListener('click', function(){
+            uncheckTask(doc.id, doc.data().name)
+          })
           pasttasklist.appendChild(newli)
 
         });
     });
-
+    
     // add some functinality for deleting a task from firestore
 
     function deleteTask(id){
       db.collection("tasks").doc(id).delete().then(() => {
+          console.log("Document successfully deleted!");
+      }).catch((error) => {
+          console.error("Error removing document: ", error);
+      });
+    }
+
+    function deletePastTask(id){
+      db.collection("completed-tasks").doc(id).delete().then(() => {
           console.log("Document successfully deleted!");
       }).catch((error) => {
           console.error("Error removing document: ", error);
@@ -163,6 +201,21 @@
           console.error("Error adding document: ", error);
       });
       deleteTask(id)
+    }
+
+    // move task back to incomplete
+    function uncheckTask(id, taskname){
+      console.log(taskname)
+      db.collection("tasks").add({
+          name: taskname
+      })
+      .then((docRef) => {
+          console.log("Document written with ID: ", docRef.id);
+      })
+      .catch((error) => {
+          console.error("Error adding document: ", error);
+      });
+      deletePastTask(id)
     }
 
     // add some functionality for adding tasks to firestore
