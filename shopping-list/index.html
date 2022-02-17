@@ -52,8 +52,10 @@
       <input id="new-task-text" type="text" placeholder="add new task">
       <button type="submit" id="add-new-task-btn">add</button>
     </form>
-    <button id="az" class="chip chip-active" value="asc">SORT A - Z</button>
-    <button id="za" class="chip" value="desc">SORT Z - A</button>
+    <button id="az" class="chip chip-active" value="asc">A - Z</button>
+    <button id="za" class="chip" value="desc">Z - A</button>
+    <!--<button id="daa" class="chip" value="desc">DATE ASC</button>
+    <button id="dad" class="chip" value="desc">DATE DESC</button>-->
     <ul id="task-list">
     </ul>
     <h3>Completed Tasks</h3>
@@ -89,7 +91,7 @@
       az.classList.remove('chip-active')
     }
     else{
-
+      localStorage.setItem('sortby',"asc")
     }
 
     //change chip
@@ -115,22 +117,29 @@
         
         querySnapshot.forEach((doc) => {
           var taskname = doc.data().name;
-
+          var createdon = doc.data().created.toDate().toString()
           var newli = document.createElement("li")
           var deleteicon = document.createElement("i")
           var checkicon = document.createElement("i")
+          var contentdiv = document.createElement("div")
+          var newlih = document.createElement("h6")
+          var datep = document.createElement("p")
           deleteicon.classList.add('fa')
           deleteicon.classList.add('fa-trash')
           checkicon.classList.add('fa')
           checkicon.classList.add('fa-circle-o')
-          newli.innerHTML = taskname
+          newlih.innerHTML = taskname
+          datep.innerHTML = createdon
+          contentdiv.appendChild(newlih)
+          contentdiv.appendChild(datep)
+          newli.appendChild(contentdiv)
           newli.appendChild(checkicon)
           newli.appendChild(deleteicon)
           deleteicon.addEventListener('click', function(){
             deleteTask(doc.id)
           })
           checkicon.addEventListener('click', function(){
-            checkTask(doc.id, doc.data().name)
+            checkTask(doc.id, doc.data().name, doc.data().created)
           })
           tasklist.appendChild(newli)
 
@@ -144,21 +153,29 @@
 
         querySnapshot.forEach((doc) => {
           var taskname = doc.data().name;
+          var createdon = doc.data().created.toDate().toString()
           var newli = document.createElement("li")
           var deleteicon = document.createElement("i")
           var checkicon = document.createElement("i")
+          var contentdiv = document.createElement("div")
+          var newlih = document.createElement("h6")
+          var datep = document.createElement("p")
           deleteicon.classList.add('fa')
           deleteicon.classList.add('fa-trash')
           checkicon.classList.add('fa')
-          checkicon.classList.add('fa-check-circle')
-          newli.innerHTML = taskname
+          checkicon.classList.add('fa-circle-o')
+          newlih.innerHTML = taskname
+          datep.innerHTML = createdon
+          contentdiv.appendChild(newlih)
+          contentdiv.appendChild(datep)
+          newli.appendChild(contentdiv)
           newli.appendChild(checkicon)
           newli.appendChild(deleteicon)
           deleteicon.addEventListener('click', function(){
             completeddeleteTask(doc.id)
           })
           checkicon.addEventListener('click', function(){
-            uncheckTask(doc.id, doc.data().name)
+            uncheckTask(doc.id, doc.data().name, doc.data().created)
           })
           pasttasklist.appendChild(newli)
 
@@ -192,10 +209,10 @@
     }
 
     // move task to completed
-    function checkTask(id, taskname){
-      console.log(taskname)
+    function checkTask(id, taskname, createdon){
       db.collection("completed-tasks").add({
-          name: taskname
+          name: taskname,
+          created: createdon
       })
       .then((docRef) => {
           console.log("Document written with ID: ", docRef.id);
@@ -207,10 +224,10 @@
     }
 
     // move task back to incomplete
-    function uncheckTask(id, taskname){
-      console.log(taskname)
+    function uncheckTask(id, taskname, createdon){
       db.collection("tasks").add({
-          name: taskname
+          name: taskname,
+          created: createdon
       })
       .then((docRef) => {
           console.log("Document written with ID: ", docRef.id);

@@ -64,6 +64,15 @@ li{
     padding:5px 20px;
 }
 
+li div{
+    margin-left:5px!important;
+}
+
+li p{
+    font-size:12px;
+    margin-bottom:0px;
+}
+
 #new-task-text:focus-visible{
     outline:none!important;
 }
