@@ -48,10 +48,10 @@
   <div class="container">
 
     <h1>Task List from Firestore</h1>
-    <div id="add-new">
+    <form id="add-new">
       <input id="new-task-text" type="text" placeholder="add new task">
-      <button id="add-new-task-btn" type="submit">add</button>
-    </div>
+      <button type="submit" id="add-new-task-btn">add</button>
+    </form>
     <button id="az" class="chip chip-active" value="asc">SORT A - Z</button>
     <button id="za" class="chip" value="desc">SORT Z - A</button>
     <ul id="task-list">
@@ -79,9 +79,11 @@
     const pasttasklist = document.querySelector('#past-task-list')
     const newtasktext = document.querySelector('#new-task-text')
     const addnewbtn = document.querySelector('#add-new-task-btn')
+    const addnew = document.querySelector('#add-new')
     var az = document.querySelector('#az')
     var za = document.querySelector('#za')
 
+    //load saved preference
     if (localStorage.getItem('sortby') === 'desc'){
       za.classList.add('chip-active')
       az.classList.remove('chip-active')
@@ -90,6 +92,7 @@
 
     }
 
+    //change chip
     az.addEventListener('click', function(){
       localStorage.setItem('sortby',"asc")
       az.classList.add('chip-active')
@@ -104,6 +107,7 @@
       location.reload()
     })
     
+    //get data
     db.collection("tasks").orderBy("name", localStorage.getItem('sortby'))
     .onSnapshot((querySnapshot) => {
 
@@ -140,7 +144,6 @@
 
         querySnapshot.forEach((doc) => {
           var taskname = doc.data().name;
-
           var newli = document.createElement("li")
           var deleteicon = document.createElement("i")
           var checkicon = document.createElement("i")
@@ -220,11 +223,13 @@
 
     // add some functionality for adding tasks to firestore
 
-    addnewbtn.addEventListener('click', function(){
+    addnew.addEventListener('submit', function(event){
       // Add a new document with a generated id.
+      event.preventDefault()
       var newtaskname = newtasktext.value
       db.collection("tasks").add({
-          name: newtaskname
+          name: newtaskname,
+          created: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then((docRef) => {
           console.log("Document written with ID: ", docRef.id);
