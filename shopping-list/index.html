@@ -54,8 +54,8 @@
     </form>
     <button id="az" class="chip chip-active" value="asc">A - Z</button>
     <button id="za" class="chip" value="desc">Z - A</button>
-    <!--<button id="daa" class="chip" value="desc">DATE ASC</button>
-    <button id="dad" class="chip" value="desc">DATE DESC</button>-->
+    <button id="da" class="chip" value="desc">DATE ASC</button>
+    <button id="dd" class="chip" value="desc">DATE DESC</button>
     <ul id="task-list">
     </ul>
     <h3>Completed Tasks</h3>
@@ -84,33 +84,81 @@
     const addnew = document.querySelector('#add-new')
     var az = document.querySelector('#az')
     var za = document.querySelector('#za')
+    var da = document.querySelector('#da')
+    var dd = document.querySelector('#dd')
 
     //load saved preference
-    if (localStorage.getItem('sortby') === 'desc'){
-      za.classList.add('chip-active')
-      az.classList.remove('chip-active')
-    }
-    else{
-      localStorage.setItem('sortby',"asc")
+    if (localStorage.getItem('filter')){
+      changeFilter(localStorage.getItem('filter'))
     }
 
-    //change chip
+    else{
+      localStorage.setItem('filter','az')
+      changeFilter('az')
+    }
+
+    //change chip and filter info
     az.addEventListener('click', function(){
-      localStorage.setItem('sortby',"asc")
-      az.classList.add('chip-active')
-      za.classList.remove('chip-active')
+      changeFilter('az')
       location.reload()
     })
 
     za.addEventListener('click', function(){
-      localStorage.setItem('sortby',"desc")
-      za.classList.add('chip-active')
-      az.classList.remove('chip-active')
+      changeFilter('za')
       location.reload()
     })
+
+    da.addEventListener('click', function(){
+      changeFilter('da')
+      location.reload()
+    })
+
+    dd.addEventListener('click', function(){
+      changeFilter('dd')
+      location.reload()
+    })
+
+    function changeFilter(filter){
+      if (filter === 'az'){
+        localStorage.setItem('filter','az')
+        localStorage.setItem('sorttype','name')
+        localStorage.setItem('sortby',"asc")
+        az.classList.add('chip-active')
+        za.classList.remove('chip-active')
+        da.classList.remove('chip-active')
+        dd.classList.remove('chip-active')
+      }
+      else if (filter === 'za'){
+        localStorage.setItem('filter','za')
+        localStorage.setItem('sorttype','name')
+        localStorage.setItem('sortby',"desc")
+        az.classList.remove('chip-active')
+        za.classList.add('chip-active')
+        da.classList.remove('chip-active')
+        dd.classList.remove('chip-active')
+      }
+      else if (filter === 'da'){
+        localStorage.setItem('filter','da')
+        localStorage.setItem('sorttype','created')
+        localStorage.setItem('sortby',"asc")
+        az.classList.remove('chip-active')
+        za.classList.remove('chip-active')
+        da.classList.add('chip-active')
+        dd.classList.remove('chip-active')
+      }
+      else if (filter === 'dd'){
+        localStorage.setItem('filter','dd')
+        localStorage.setItem('sorttype','created')
+        localStorage.setItem('sortby',"desc")
+        az.classList.remove('chip-active')
+        za.classList.remove('chip-active')
+        da.classList.remove('chip-active')
+        dd.classList.add('chip-active')
+      }
+    }
     
     //get data
-    db.collection("tasks").orderBy("name", localStorage.getItem('sortby'))
+    db.collection("tasks").orderBy(localStorage.getItem('sorttype'), localStorage.getItem('sortby'))
     .onSnapshot((querySnapshot) => {
 
         tasklist.innerHTML = ""
