@@ -1,6 +1,7 @@
 {
-  "short_name": "",
-  "name": "",
+  "short_name": "Task List",
+  "name": "Task List",
+  "description": "A task list using Firestore storage",
   "icons": [{
     "src": "icon.png",
     "type": "image/png",
