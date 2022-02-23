@@ -49,9 +49,11 @@
 
     <h1>Task List from Firestore</h1>
     <form id="add-new">
-      <input id="new-task-text" type="text" placeholder="add new task">
+      <input id="new-task-text" type="text" placeholder="add new task title">
+      <input id="new-task-description" type="text" placeholder="add optional note">
       <button type="submit" id="add-new-task-btn">add</button>
     </form>
+    <h3>Current Tasks</h3>
     <button id="az" class="chip chip-active" value="asc">A - Z</button>
     <button id="za" class="chip" value="desc">Z - A</button>
     <button id="da" class="chip" value="desc">DATE ASC</button>
@@ -80,6 +82,7 @@
     const tasklist = document.querySelector('#task-list')
     const pasttasklist = document.querySelector('#past-task-list')
     const newtasktext = document.querySelector('#new-task-text')
+    const newtaskdescription = document.querySelector('#new-task-description')
     const addnewbtn = document.querySelector('#add-new-task-btn')
     const addnew = document.querySelector('#add-new')
     var az = document.querySelector('#az')
@@ -165,6 +168,7 @@
         
         querySnapshot.forEach((doc) => {
           var taskname = doc.data().name;
+          var tasknote = doc.data().note;
           var createdon = doc.data().created.toDate().toString()
           var newli = document.createElement("li")
           var deleteicon = document.createElement("i")
@@ -172,13 +176,17 @@
           var contentdiv = document.createElement("div")
           var newlih = document.createElement("h6")
           var datep = document.createElement("p")
+          var note = document.createElement("p")
+          note.classList.add('note')
           deleteicon.classList.add('fa')
           deleteicon.classList.add('fa-trash')
           checkicon.classList.add('fa')
           checkicon.classList.add('fa-circle-o')
           newlih.innerHTML = taskname
           datep.innerHTML = createdon
+          note.innerHTML = tasknote
           contentdiv.appendChild(newlih)
+          contentdiv.appendChild(note)
           contentdiv.appendChild(datep)
           newli.appendChild(contentdiv)
           newli.appendChild(checkicon)
@@ -187,20 +195,21 @@
             deleteTask(doc.id)
           })
           checkicon.addEventListener('click', function(){
-            checkTask(doc.id, doc.data().name, doc.data().created)
+            checkTask(doc.id, doc.data().name, doc.data().note, doc.data().created)
           })
           tasklist.appendChild(newli)
 
         });
     });
     
-    db.collection("completed-tasks").orderBy("name", localStorage.getItem('sortby'))
+    db.collection("completed-tasks").orderBy(localStorage.getItem('sorttype'), localStorage.getItem('sortby'))
     .onSnapshot((querySnapshot) => {
 
         pasttasklist.innerHTML = ""
 
         querySnapshot.forEach((doc) => {
           var taskname = doc.data().name;
+          var tasknote = doc.data().note;
           var createdon = doc.data().created.toDate().toString()
           var newli = document.createElement("li")
           var deleteicon = document.createElement("i")
@@ -208,13 +217,17 @@
           var contentdiv = document.createElement("div")
           var newlih = document.createElement("h6")
           var datep = document.createElement("p")
+          var note = document.createElement("p")
+          note.classList.add('note')
           deleteicon.classList.add('fa')
           deleteicon.classList.add('fa-trash')
           checkicon.classList.add('fa')
           checkicon.classList.add('fa-check-circle')
           newlih.innerHTML = taskname
           datep.innerHTML = createdon
+          note.innerHTML = tasknote
           contentdiv.appendChild(newlih)
+          contentdiv.appendChild(note)
           contentdiv.appendChild(datep)
           newli.appendChild(contentdiv)
           newli.appendChild(checkicon)
@@ -223,7 +236,7 @@
             completeddeleteTask(doc.id)
           })
           checkicon.addEventListener('click', function(){
-            uncheckTask(doc.id, doc.data().name, doc.data().created)
+            uncheckTask(doc.id, doc.data().name, doc.data().note, doc.data().created)
           })
           pasttasklist.appendChild(newli)
 
@@ -257,9 +270,10 @@
     }
 
     // move task to completed
-    function checkTask(id, taskname, createdon){
+    function checkTask(id, taskname, tasknote, createdon){
       db.collection("completed-tasks").add({
           name: taskname,
+          note: tasknote,
           created: createdon
       })
       .then((docRef) => {
@@ -272,9 +286,10 @@
     }
 
     // move task back to incomplete
-    function uncheckTask(id, taskname, createdon){
+    function uncheckTask(id, taskname, tasknote, createdon){
       db.collection("tasks").add({
           name: taskname,
+          note: tasknote,
           created: createdon
       })
       .then((docRef) => {
@@ -292,18 +307,26 @@
       // Add a new document with a generated id.
       event.preventDefault()
       var newtaskname = newtasktext.value
-      db.collection("tasks").add({
-          name: newtaskname,
-          created: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-          newtasktext.value = "";
-          newtasktext.focus();
-      })
-      .catch((error) => {
-          console.error("Error adding document: ", error);
-      });
+      var newtasknote = newtaskdescription.value
+      if (newtaskname.length == 0){
+        alert('Please enter a task title')
+      }
+      else{
+        db.collection("tasks").add({
+            name: newtaskname,
+            note: newtasknote,
+            created: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+            newtasktext.value = "";
+            newtaskdescription.value = "";
+            newtasktext.focus();
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+      }
     })
 
   </script>
