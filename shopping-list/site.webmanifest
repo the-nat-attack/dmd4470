@@ -2,10 +2,15 @@
   "short_name": "Task List",
   "name": "Task List",
   "description": "A task list using Firestore storage",
+  "display":"fullscreen",
   "icons": [{
     "src": "icon.png",
     "type": "image/png",
     "sizes": "192x192"
+  },{
+    "src": "icon2.png",
+    "type": "image/png",
+    "sizes": "512x512"
   }],
   "start_url": "/?utm_source=homescreen",
   "background_color": "#fafafa",
