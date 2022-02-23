@@ -99,9 +99,15 @@ h6{
     font-size:14px;
     color:black;
     margin-bottom:5px;
+    border:none;
+    background-color:rgb(237, 237, 237);
 }
 
-#new-task-text:focus-visible,#new-task-description:focus-visible{
+.note:focus-visible{
+    background-color:#e0e0e0;
+}
+
+#new-task-text:focus-visible,#new-task-description:focus-visible,.note:focus-visible{
     outline:none!important;
 }
 

@@ -176,7 +176,8 @@
           var contentdiv = document.createElement("div")
           var newlih = document.createElement("h6")
           var datep = document.createElement("p")
-          var note = document.createElement("p")
+          var note = document.createElement("input")
+          note.setAttribute('placeholder','click to update note')
           note.classList.add('note')
           deleteicon.classList.add('fa')
           deleteicon.classList.add('fa-trash')
@@ -184,13 +185,18 @@
           checkicon.classList.add('fa-circle-o')
           newlih.innerHTML = taskname
           datep.innerHTML = createdon
-          note.innerHTML = tasknote
+          note.setAttribute('value',tasknote)
           contentdiv.appendChild(newlih)
           contentdiv.appendChild(note)
           contentdiv.appendChild(datep)
           newli.appendChild(contentdiv)
           newli.appendChild(checkicon)
           newli.appendChild(deleteicon)
+          note.addEventListener('change',function(){
+            db.collection("tasks").doc(doc.id).update({
+            note: note.value,
+            })
+          })
           deleteicon.addEventListener('click', function(){
             deleteTask(doc.id)
           })
@@ -217,7 +223,7 @@
           var contentdiv = document.createElement("div")
           var newlih = document.createElement("h6")
           var datep = document.createElement("p")
-          var note = document.createElement("p")
+          var note = document.createElement("input")
           note.classList.add('note')
           deleteicon.classList.add('fa')
           deleteicon.classList.add('fa-trash')
@@ -225,13 +231,19 @@
           checkicon.classList.add('fa-check-circle')
           newlih.innerHTML = taskname
           datep.innerHTML = createdon
-          note.innerHTML = tasknote
+          note.setAttribute('value',tasknote)
+          note.setAttribute('placeholder','click to update note')
           contentdiv.appendChild(newlih)
           contentdiv.appendChild(note)
           contentdiv.appendChild(datep)
           newli.appendChild(contentdiv)
           newli.appendChild(checkicon)
           newli.appendChild(deleteicon)
+          note.addEventListener('change',function(){
+            db.collection("completed-tasks").doc(doc.id).update({
+            note: note.value,
+            })
+          })
           deleteicon.addEventListener('click', function(){
             completeddeleteTask(doc.id)
           })
