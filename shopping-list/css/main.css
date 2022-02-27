@@ -4,6 +4,24 @@
 
 h1{
     margin-top:20px!important;
+    color:#fff;
+}
+
+.top-header{
+    background-color:#151B29;
+    padding:20px 0px;
+}
+
+.add-section{
+    background-color:#98C1D9
+}
+
+.list-section{
+    padding-top:20px;
+}
+
+body{
+    background-color:#f2f2f2!important
 }
 
 #add-new{
@@ -39,9 +57,11 @@ ul{
 
 li{
     padding:10px 20px;
-    background-color:#ededed;
+    background-color:#fff;
     margin:10px 0px;
     display:flex;
+    border-radius:15px;
+    box-shadow:3px 3px 10px rgba(0,0,0,0.1);
 }
 
 #add-new{
@@ -56,24 +76,27 @@ li{
     border:none;
     margin-left:0px;
     padding:5px 10px;
-    background-color: #3D5AFE;
+    background-color: #EE6C4D;
     color: #ffffff;
+    font-weight:600;
+    border-radius: 0px 0px 15px 15px;
 }
 
 #add-new-task-btn:hover{
-    background-color: #303F9F;
+    background-color: #d95232;
     transition:0.3s;
 }
 
 #new-task-text,#new-task-description{
     border:none;
-    background-color: #ededed;
+    background-color: #fff;
     padding:5px 20px;
 }
 
 #new-task-text{
-    border-bottom:1px solid #c2c2c2;
+    border-bottom:1px solid #dedede;
     font-size:20px;
+    border-radius: 15px 15px 0px 0px;
 }
 
 #new-task-description{
@@ -100,11 +123,11 @@ h6{
     color:black;
     margin-bottom:5px;
     border:none;
-    background-color:rgb(237, 237, 237);
+    background-color:#fff;
 }
 
 .note:focus-visible{
-    background-color:#e0e0e0;
+    background-color:#f2f2f2;
 }
 
 #new-task-text:focus-visible,#new-task-description:focus-visible,.note:focus-visible{
@@ -117,9 +140,11 @@ h6{
     padding:5px 20px;
     margin-top:10px;
     font-size:12px;
+    background-color:#fff;
+    font-weight:600;
 }
 
 .chip-active{
-    background-color:#3D5AFE;
+    background-color:#EE6C4D;
     color:#fff;
 }
