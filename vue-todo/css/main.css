@@ -1,0 +1,127 @@
+*{
+    margin: 0 auto;
+}
+
+body{
+    background-color:#f2f2f2!important;
+    color:#212529;
+}
+
+h1{
+    color:white;
+    text-align:center;
+}
+
+.top-header{
+    background-color:#151B29;
+    padding:20px 0px;
+}
+
+.add-section{
+    background-color:#98C1D9
+}
+
+.list-section{
+    padding-top:20px;
+}
+
+li button{
+    background-color: transparent;
+    border: none;
+    color: black;
+    padding: 0px 10px;
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+    padding-left:0px!important;
+}
+
+li{
+    padding:10px 20px;
+    background-color:#fff;
+    margin:10px 0px;
+    display:flex;
+    border-radius:15px;
+    box-shadow:3px 3px 10px rgba(0,0,0,0.1);
+}
+
+.taskname{
+    font-size:larger;
+    font-weight:600;
+}
+
+.duedate{
+    font-size: 11px;
+    margin-bottom: 0px;
+    color: #7d7d7d;
+}
+
+.fa:before{
+    font-size:25px;
+}
+
+.fa{
+    height:38px;
+}
+
+.fa-trash{
+    color:#b00c0c;
+    justify-content: flex-end;
+    margin-right:0px;
+}
+
+.note-due{
+    display:flex;
+    flex-direction:column;
+    margin-left:0px;
+}
+
+input{
+    font-size:14px;
+    color:black;
+    margin-bottom:5px;
+    border:none;
+    background-color:#fff;
+}
+
+input:focus-visible{
+    background-color:#f2f2f2;
+    outline:none!important;
+}
+
+#add-new{
+    display:flex;
+    flex-direction:column;
+    max-width:500px;
+    padding:20px 0px;
+}
+
+#add-new-task-btn{
+    border:none;
+    margin-left:0px;
+    padding:5px 10px;
+    background-color: #EE6C4D;
+    color: #ffffff;
+    font-weight:600;
+    border-radius: 0px 0px 15px 15px;
+}
+
+#add-new-task-btn:hover{
+    background-color: #d95232;
+    transition:0.3s;
+}
+
+#new-task-text{
+    border-bottom:1px solid #dedede;
+    font-size:20px;
+    border-radius: 15px 15px 0px 0px;
+}
+#new-task-note{
+    border-bottom:1px solid #dedede;
+}
+
+#add-new input{
+    padding:5px 20px;
+}
