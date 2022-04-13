@@ -9,16 +9,16 @@
 </head>
 <body>
   <div id="app">
-    <v-app>
-        <v-app id="inspire">
+    <v-app id="inspire">
             <v-app-bar
               app
               color="white"
               flat
               elevate-on-scroll
               elevation="2"
+              class="hidden-sm-and-down"
             >
-              <v-container class="py-0 fill-height">
+              <v-container class="py-0 fill-height" >
                 <img class="mr-5" width="40" src="img/logo3.png" alt="Carrier Pigeon Logo">
                 <h2 style="color: #2B81D6;">Carrier Pigeon</h2>
                 <v-spacer></v-spacer>
@@ -39,7 +39,6 @@
                 PIGEON
               </v-btn>
                 <v-spacer></v-spacer>
-        
                 <v-responsive max-width="260">
                   <v-text-field 
                     dense
@@ -50,7 +49,46 @@
                   ></v-text-field>
                 </v-responsive>
               </v-container>
-            </v-app-bar>
+         </v-app-bar>
+         <v-app-bar
+         app
+         color="white"
+         flat
+         elevate-on-scroll
+         elevation="2"
+         class="hidden-md-and-up"
+         >
+          <v-container class="py-0 fill-height">
+          <img class="mr-5" width="40" src="img/logo3.png" alt="Carrier Pigeon Logo">
+          <h2 style="color: #2B81D6;">Carrier Pigeon</h2>
+          <v-spacer></v-spacer>
+          <v-menu
+            top
+            :close-on-click="closeOnClick"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="white"
+                v-bind="attrs"
+                v-on="on"
+                elevation="0"
+              >
+                <v-icon>mdi-menu</v-icon>
+              </v-btn>
+            </template>
+      
+            <v-list>
+              <v-list-item
+                v-for="(item, index) in items"
+                :key="index"
+              >
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          </v-container>
+          </v-app-bar>
+
         
             <v-main style="background: url('img/Cloudy2.svg') no-repeat center center fixed; background-size:cover">
               <v-container>
@@ -282,6 +320,12 @@
       data: function() {
         return {
           app_title:"Fun Vuetify App",
+          items: [
+        { title: 'HOME' },
+        { title: 'PROFILE' },
+        { title: 'PIGEON' },
+      ],
+      closeOnClick: true,
           
         }
       },
