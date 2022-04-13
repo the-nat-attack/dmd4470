@@ -1,0 +1,7 @@
+.active .v-card-title{
+    background-color:blue;
+}
+
+.complete .v-card-title{
+    background-color:green;
+}

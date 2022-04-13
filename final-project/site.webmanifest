@@ -1,0 +1,18 @@
+{
+  "short_name": "Task List Vue",
+  "name": "Task List Vue",
+  "description": "A task list using Firestore storage with VueJS",
+  "display":"fullscreen",
+  "icons": [{
+    "src": "icon.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  },{
+    "src": "icon2.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }],
+  "start_url": "index.html",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa"
+}

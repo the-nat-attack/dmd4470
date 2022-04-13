@@ -1,0 +1,4 @@
+
+.theme--light.v-text-field--solo-inverted.v-input--is-focused>.v-input__control>.v-input__slot{
+    color: rgb(43, 129, 214)!important;
+}

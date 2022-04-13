@@ -1,0 +1,94 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container class="fill-height" fluid style="background: url('img/Cloudy.svg') no-repeat center center fixed; background-size:cover">
+          <v-row align="center" justify="center" dense>
+            <v-col cols="12" sm="8" md="6" lg="4">
+              <transition name="slide-x-reverse-transition" appear>
+              <v-card elevation="4" class="rounded-xl pa-4" >
+                  <v-btn icon href="index.html"><v-icon large color="secondary">mdi-arrow-left</v-icon></v-btn>
+                  <v-img src="img/logo2.png" alt="Carrier Pigeon Log" contain height="200"></v-img>
+                  <h1 class="pl-4 pr-4">Sign Up & Start Connecting</h1>
+                  <h3 class="pl-4 pr-4">Kill two birds with one stone.</h3>
+                  <v-card-text>
+                  <v-form>
+                    <v-text-field label="First Name" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
+                    <v-text-field label="Last Name" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
+                    <v-text-field label="Username" name="email" prepend-inner-icon="mdi-email" type="email" rounded outlined></v-text-field>
+                    <v-text-field label="Password" name="password" prepend-inner-icon="mdi-lock" type="password" rounded outlined></v-text-field>
+                    <v-btn rounded color="primary" x-large block dark>Signup</v-btn>
+                  </v-form>
+                    <v-card-actions class="text--secondary">
+                        <v-spacer></v-spacer>
+                        <!-- <router-link :to="{ name: 'SignUp' }">Sign Up</router-link> -->
+                        Already have a pigeon? <a href="#" class="pl-2" style="color: #000000">Log In</a>
+                    </v-card-actions>
+                </v-card-text>
+                
+              </v-card>
+              </transition>
+            </v-col>
+          </v-row>
+        </v-container>
+          
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: function() {
+        return {
+          app_title:"Fun Vuetify App",
+          tasks: [
+            {
+              title:"Task 1",
+              date:"10/12/2222",
+              description:"A description!",
+              status:"active"
+            },
+            {
+              title:"Task 2",
+              date:"09/12/8192",
+              description:"Another description!",
+              status:"active"
+            },
+            {
+              title:"Task 3",
+              date:"10/12/2222",
+              description:"A description!",
+              status:"active"
+            },
+            {
+              title:"Task 4",
+              date:"09/12/8192",
+              description:"Another description!",
+              status:"active"
+            }
+          ]
+        
+        }
+      },
+      methods:{
+        addTask(){
+          console.log('hi')
+        }
+      }
+    })
+  </script>
+</body>
+</html>

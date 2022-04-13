@@ -1,0 +1,98 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-app-bar elevation="4">
+          <v-toolbar-title>{{app_title}}</v-toolbar-title>
+          <v-col>
+            <v-text-field
+            :append-icon="'mdi-send'"
+            filled
+            clear-icon="mdi-close-circle"
+            clearable
+            label="Message"
+            type="text"
+            @click:append="addTask"
+            >
+            </v-text-field>
+          </v-col>
+        </v-app-bar>
+        <v-container>
+          <v-row>
+            <v-col v-for="task in tasks" :md="4" v-bind:key="task.title" >
+              <v-card elevation="2" :class="task.status">
+                <v-card-title>{{task.title}}</v-card-title>
+                <v-card-subtitle>{{task.date}}</v-card-subtitle>
+                <v-card-text>{{task.description}}</v-card-text>
+                <v-card-actions>
+                  <v-btn @click="task.status='complete'">
+                    Complete
+                    <v-icon right dark>
+                      mdi-check
+                    </v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: function() {
+        return {
+          app_title:"Fun Vuetify App",
+          tasks: [
+            {
+              title:"Task 1",
+              date:"10/12/2222",
+              description:"A description!",
+              status:"active"
+            },
+            {
+              title:"Task 2",
+              date:"09/12/8192",
+              description:"Another description!",
+              status:"active"
+            },
+            {
+              title:"Task 3",
+              date:"10/12/2222",
+              description:"A description!",
+              status:"active"
+            },
+            {
+              title:"Task 4",
+              date:"09/12/8192",
+              description:"Another description!",
+              status:"active"
+            }
+          ]
+        
+        }
+      },
+      methods:{
+        addTask(){
+          console.log('hi')
+        }
+      }
+    })
+  </script>
+</body>
+</html>
