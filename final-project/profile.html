@@ -23,18 +23,17 @@
                 <h2 style="color: #2B81D6;">Carrier Pigeon</h2>
                 <v-spacer></v-spacer>
                 <v-btn
-                text style="color: #2B81D6;"
+                text href="home.html"
               >
                 HOME
               </v-btn>
               <v-btn
-                text href="profile.html"
+                text style="color: #2B81D6;"
               >
-                PROFILE
+                PROFILE 
               </v-btn>
               <v-btn
-                text
-                href="pigeon.html"
+                text 
               >
                 PIGEON
               </v-btn>
@@ -80,22 +79,19 @@
             <v-list>
               <v-list-item class="justify-center">
               <v-btn
-              text style="color: #2B81D6;">
+              text href="home.html">
               HOME
               </v-btn>
               </v-list-item>
               <v-list-item>
                 <v-btn
-                text
-                text href="profile.html">
+                text style="color: #2B81D6;">
                 PROFILE
                 </v-btn>
                 </v-list-item>
                 <v-list-item>
                   <v-btn
-                  text
-                  href="pigeon.html"
-                  >
+                  text >
                   PIGEON
                   </v-btn>
                   </v-list-item>
@@ -106,12 +102,44 @@
           </v-app-bar>
 
         
-            <v-main class="pt-0" style="background: url('img/Cloudy2.svg') no-repeat center center fixed; background-size:cover">
-              <v-container class="pt-10">
-                <v-row class="pt-10">
-                  <v-col>
-                    <v-card
-                    class="mx-auto mt-5 mb-5"
+          <v-main class="pt-0" style="background: url('img/Cloudy2.svg') no-repeat center center fixed; background-size:cover">
+            <v-container class="pt-10">
+              <v-row class="pt-10"
+              >
+                <v-col cols="12" sm="5" md="3" lg="3" xl="3">
+                  <v-card
+                      class="mx-auto mt-0"
+                      
+                    >
+    <template slot="progress">
+      <v-progress-linear
+        color="deep-purple"
+        height="10"
+        indeterminate
+      ></v-progress-linear>
+    </template>
+
+    <v-img
+      height="250"
+      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+    ></v-img>
+
+    <v-card-title class="pb-0">First Name Last Name</v-card-title>
+
+    <v-card-text>
+      <div class="mb-2 text-subtitle-1">
+        Joined May 2022
+      </div>
+
+      <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+    </v-card-text>
+  </v-card>
+                </v-col>
+      
+                <v-col cols="12" sm="6" md="6" lg="6" xl="4">
+                  <h2 style="color:white">My Pigeons</h2>
+                  <v-card
+                    class="mx-auto mt-5 mb-5 ml-0"
                     color="#fff"
                     dark
                     max-width="600"
@@ -151,7 +179,7 @@
                     </v-card-actions>
                   </v-card>
                   <v-card
-                    class="mx-auto mt-5 mb-5"
+                    class="mx-auto mt-5 mb-5 ml-0"
                     color="#fff"
                     dark
                     max-width="600"
@@ -182,148 +210,95 @@
                           align="center"
                           justify="end"
                         >
-                          <v-icon style="color: #2B81D6;" class="mr-1">
+                          <v-icon style="color: #dbdbdb;" class="mr-1">
                             mdi-heart
                           </v-icon>
                           <span class="subheading mr-2" style="color:#242424">256</span>
                         </v-row>
                       </v-list-item>
                     </v-card-actions>
-                  </v-card><v-card
-                  class="mx-auto mt-5 mb-5"
-                  color="#fff"
-                  dark
-                  max-width="600"
-                  
-                >
-                  
-                  <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                    "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-                  </v-card-text>
-                  <v-card-text class="pt-0 pb-0" style="color:#949494">
-                    March 15, 2022
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-list-item class="grow">
-                      <v-list-item-avatar color="grey darken-3">
-                        <v-img
-                          class="elevation-6"
-                          alt=""
-                          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                        ></v-img>
-                      </v-list-item-avatar>
-              
-                      <v-list-item-content>
-                        <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                      </v-list-item-content>
-              
-                      <v-row
-                        align="center"
-                        justify="end"
-                      >
-                        <v-icon style="color: #2B81D6;" class="mr-1">
-                          mdi-heart
-                        </v-icon>
-                        <span class="subheading mr-2" style="color:#242424">256</span>
-                      </v-row>
-                    </v-list-item>
-                  </v-card-actions>
-                </v-card><v-card
-                class="mx-auto mt-5 mb-5"
-                color="#fff"
-                dark
-                max-width="600"
-                
-              >
-                
-                <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                  "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-                </v-card-text>
-                <v-card-text class="pt-0 pb-0" style="color:#949494">
-                  March 15, 2022
-                </v-card-text>
-                <v-card-actions>
-                  <v-list-item class="grow">
-                    <v-list-item-avatar color="grey darken-3">
-                      <v-img
-                        class="elevation-6"
-                        alt=""
-                        src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                      ></v-img>
-                    </v-list-item-avatar>
-            
-                    <v-list-item-content>
-                      <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                    </v-list-item-content>
-            
-                    <v-row
-                      align="center"
-                      justify="end"
-                    >
-                      <v-icon style="color: #dbdbdb;" class="mr-1">
-                        mdi-heart
-                      </v-icon>
-                      <span class="subheading mr-2" style="color:#242424">256</span>
-                    </v-row>
-                  </v-list-item>
-                </v-card-actions>
-              </v-card><v-card
-              class="mx-auto mt-5 mb-5"
-              color="#fff"
-              dark
-              max-width="600"
-              
-            >
-              
-              <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-              </v-card-text>
-              <v-card-text class="pt-0 pb-0" style="color:#949494">
-                March 15, 2022
-              </v-card-text>
-              <v-card-actions>
-                <v-list-item class="grow">
-                  <v-list-item-avatar color="grey darken-3">
-                    <v-img
-                      class="elevation-6"
-                      alt=""
-                      src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                    ></v-img>
-                  </v-list-item-avatar>
-          
-                  <v-list-item-content>
-                    <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                  </v-list-item-content>
-          
-                  <v-row
-                    align="center"
-                    justify="end"
-                  >
-                    <v-icon style="color: #2B81D6;" class="mr-1">
-                      mdi-heart
-                    </v-icon>
-                    <span class="subheading mr-2" style="color:#242424">256</span>
-                  </v-row>
-                </v-list-item>
-              </v-card-actions>
-            </v-card>
+                  </v-card>
+                </v-col>
+                <v-col cols="12" sm="12" md="3" lg="3" xl="5">
+                  <h2 style="color:white">My Messages</h2>
+                  <v-card
+                    class="mx-auto mt-5 mb-5 ml-0"
+                    color="#fff"
+                    dark
                     
-                  </v-col>
-                </v-row>
-                <v-fab-transition>
-                  <v-btn
-                    fab
-                    large
-                    bottom
-                    right
-                    fixed
-                    class="mr-8 mb-5"
                   >
-                    <v-icon style="color: #2B81D6;">mdi-bird</v-icon>
-                  </v-btn>
-                </v-fab-transition>
-              </v-container>
-            </v-main>
+                    
+                    <v-card-text class="pt-2 pb-0 text-h6" style="color:#242424">
+                      Evan You
+                    </v-card-text>
+                    <v-card-text class="pt-0 pb-0" style="color:#949494">
+                      March 15, 2022
+                    </v-card-text>
+                    <v-card-text style="color:#242424" class="pt-2 text font-weight-bold">
+                      "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-list-item class="grow">
+                        <v-row
+                          align="center"
+                          justify="end"
+                        >
+                          <v-icon style="color: #2B81D6;" class="mr-1">
+                            mdi-reply
+                          </v-icon>
+                          <span class="subheading mr-2" style="color:#242424">Reply</span>
+                        </v-row>
+                      </v-list-item>
+                    </v-card-actions>
+                  </v-card>
+                  <v-card
+                    class="mx-auto mt-5 mb-5 ml-0"
+                    color="#fff"
+                    dark
+                    
+                  >
+                    
+                    <v-card-text class="pt-2 pb-0 text-h6" style="color:#242424">
+                      Evan You
+                    </v-card-text>
+                    <v-card-text class="pt-0 pb-0" style="color:#949494">
+                      March 15, 2022
+                    </v-card-text>
+                    <v-card-text style="color:#242424" class="pt-2 text font-weight-bold">
+                      "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-list-item class="grow">
+                        <v-row
+                          align="center"
+                          justify="end"
+                        >
+                          <v-icon style="color: #2B81D6;" class="mr-1">
+                            mdi-reply
+                          </v-icon>
+                          <span class="subheading mr-2" style="color:#242424">Reply</span>
+                        </v-row>
+                      </v-list-item>
+                    </v-card-actions>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-fab-transition>
+                <v-btn
+                  fab
+                  large
+                  bottom
+                  right
+                  fixed
+                  class="mr-8 mb-5"
+                >
+                  <v-icon style="color: #2B81D6;">mdi-bird</v-icon>
+                </v-btn>
+              </v-fab-transition>
+            </v-container>
+            
+          </v-main>
+          
     </v-app>
   </div>
 
