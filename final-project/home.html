@@ -170,12 +170,12 @@
                           <v-img
                             class="elevation-6"
                             alt=""
-                            src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                            v-bind:src="getAvatar(item)"
                           ></v-img>
                         </v-list-item-avatar>
                 
                         <v-list-item-content>
-                          <v-list-item-title style="color:#242424">                          {{item.username}}
+                          <v-list-item-title style="color:#242424">{{item.username}}
                           </v-list-item-title>
                         </v-list-item-content>
                 
@@ -197,8 +197,6 @@
                     </v-card-actions>
                   </v-card>
                   
-                  
-                    
                   </v-col>
                 </v-row>
                 <v-fab-transition>
@@ -222,6 +220,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
   <script>
+    
     new Vue({
       el: '#app',
       vuetify: new Vuetify(),
@@ -247,13 +246,15 @@
       },
       methods:{
         newPigeon:function(){
-          db.collection("pigeons").add({
+          if (this.new_pigeon.message.length > 0){
+            db.collection("pigeons").add({
               createdon: new Date(),
               hearts: [],
               heartslength: 0,
               isHearted: false,
               message: this.new_pigeon.message,
-              username: "test",
+              username: localStorage.getItem('user'),
+              avatar: localStorage.getItem('avatar')
           })
           .then(() => {
               console.log("Document successfully written!");
@@ -261,10 +262,15 @@
           .catch((error) => {
               console.error("Error writing document: ", error);
           });
+          }
+          else{
+            alert("Carrier Pigeons can't send empty messages!")
+          }
+          
           this.new_pigeon.message = ""
         },
         getPigeons(){
-          db.collection("pigeons")
+          db.collection("pigeons").orderBy("createdon", "desc")
             .onSnapshot((querySnapshot) => {
               this.pigeon = []
               querySnapshot.forEach((doc) =>
@@ -275,16 +281,20 @@
                 message:doc.data().message,
                 username:doc.data().username,
                 isHearted:doc.data().isHearted,
-                id:doc.id
+                id:doc.id,
+                avatar:doc.data().avatar
               }))
             })
+        },
+        getAvatar(data){
+          return data.avatar
         },
         heartPigeon:function(data) {
           let docId = data.id;
           var docRef = db.collection("pigeons").doc(docId);
-          if ((data.hearts).indexOf("anotherheart") > -1){
+          if ((data.hearts).indexOf(localStorage.getItem('user')) > -1){
             return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayRemove("anotherheart"),
+              hearts:firebase.firestore.FieldValue.arrayRemove(localStorage.getItem('user')),
               heartslength:data.heartslength - 1,
               isHearted: false
             })
@@ -298,7 +308,7 @@
           }
           else{
             return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayUnion("anotherheart"),
+              hearts:firebase.firestore.FieldValue.arrayUnion(localStorage.getItem('user')),
               heartslength:data.heartslength + 1,
               isHearted: true
             })

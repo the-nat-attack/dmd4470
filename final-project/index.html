@@ -6,6 +6,33 @@
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <!-- Source Firebase Library from the Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <!-- Source Cloud Firestore from the Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+    </script>
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXh-S-D5ECvCUpp_Hx2b_qouifkw8CjKw",
+      authDomain: "shopping-list-v1-4a3ce.firebaseapp.com",
+      projectId: "shopping-list-v1-4a3ce",
+      storageBucket: "shopping-list-v1-4a3ce.appspot.com",
+      messagingSenderId: "163789002678",
+      appId: "1:163789002678:web:787dba4574d5720810d317",
+      measurementId: "G-V9Y712XY3W"
+    };
+
+    firebase.initializeApp(firebaseConfig)
+
+    // make sure to initizalize cloud firestore
+    var db = firebase.firestore()
+
+  </script>
 </head>
 <body>
   <div id="app">
@@ -21,9 +48,9 @@
                   <h3 class="pl-4 pr-4">Share. Connect. Pigeon.</h3>
                   <v-card-text>
                   <v-form>
-                    <v-text-field label="Username" name="email" prepend-inner-icon="mdi-email" type="email" rounded outlined></v-text-field>
-                    <v-text-field label="Password" name="password" prepend-inner-icon="mdi-lock" type="password" rounded outlined></v-text-field>
-                    <v-btn href="home.html" rounded color="primary" x-large block dark>Login</v-btn>
+                    <v-text-field label="Username" id="username" name="username" prepend-inner-icon="mdi-account" type="email" rounded outlined></v-text-field>
+                    <v-text-field label="Password" id="password" name="password" prepend-inner-icon="mdi-lock" type="password" rounded outlined></v-text-field>
+                    <v-btn @click=checkLogin() rounded color="primary" x-large block dark>Login</v-btn>
                     <v-card-actions class="text--secondary">
                       <v-spacer></v-spacer>
                       <!-- <router-link :to="{ name: 'SignUp' }">Sign Up</router-link> -->
@@ -81,8 +108,24 @@
         }
       },
       methods:{
-        addTask(){
-          console.log('hi')
+        checkLogin:function(){
+          var docRef = db.collection("users").doc(document.getElementById('username').value);
+          docRef.get().then((doc) => {
+            if (doc.exists){
+              if (document.getElementById('password').value === doc.data().password){
+                localStorage.setItem('user', document.getElementById('username').value)
+                localStorage.setItem('avatar', doc.data().avatar)
+                window.location.replace("/home.html")
+              }
+              else{
+                console.log('Incorrect password.')
+              }
+            }
+            else {
+              alert('Username not recognized. To make an account, click "Sign Up."')
+            }
+        })
+          
         }
       }
     })
