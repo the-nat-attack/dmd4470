@@ -6,6 +6,33 @@
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <!-- Source Firebase Library from the Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <!-- Source Cloud Firestore from the Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+    </script>
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXh-S-D5ECvCUpp_Hx2b_qouifkw8CjKw",
+      authDomain: "shopping-list-v1-4a3ce.firebaseapp.com",
+      projectId: "shopping-list-v1-4a3ce",
+      storageBucket: "shopping-list-v1-4a3ce.appspot.com",
+      messagingSenderId: "163789002678",
+      appId: "1:163789002678:web:787dba4574d5720810d317",
+      measurementId: "G-V9Y712XY3W"
+    };
+
+    firebase.initializeApp(firebaseConfig)
+
+    // make sure to initizalize cloud firestore
+    var db = firebase.firestore()
+
+  </script>
 </head>
 <body>
   <div id="app">
@@ -22,11 +49,19 @@
                   <h3 class="pl-4 pr-4">Kill two birds with one stone.</h3>
                   <v-card-text>
                   <v-form>
-                    <v-text-field label="First Name" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
-                    <v-text-field label="Last Name" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
-                    <v-text-field label="Username" name="email" prepend-inner-icon="mdi-email" type="email" rounded outlined></v-text-field>
-                    <v-text-field label="Password" name="password" prepend-inner-icon="mdi-lock" type="password" rounded outlined></v-text-field>
-                    <v-btn rounded color="primary" x-large block dark>Signup</v-btn>
+                    <v-text-field id="first" label="First Name" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
+                    <v-text-field id="last" label="Last Name" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
+                    <v-textarea id="bio" prepend-inner-icon="mdi-text-account" outlined rounded label="Bio" id="compose-box"
+                      rows="3"
+                      color="primary"
+                      :rules="[v => (v || '' ).length <= 200 || 'Bio must be 200 characters or less']"
+                      class="pb-2"
+                      placeholder=""
+                    >
+                    </v-textarea>
+                    <v-text-field id="username" label="Username" name="email" prepend-inner-icon="mdi-email" type="email" rounded outlined></v-text-field>
+                    <v-text-field id="password" label="Password" name="password" prepend-inner-icon="mdi-lock" type="password" rounded outlined></v-text-field>
+                    <v-btn @click="makeAccount()" rounded color="primary" x-large block dark>Signup</v-btn>
                   </v-form>
                     <v-card-actions class="text--secondary">
                         <v-spacer></v-spacer>
@@ -84,8 +119,32 @@
         }
       },
       methods:{
-        addTask(){
-          console.log('hi')
+        makeAccount(){
+          const usersRef = db.collection("users").doc(document.getElementById('username').value)
+          usersRef.get()
+            .then ((docSnapshot) => {
+              if (docSnapshot.exists){
+                alert ("Username taken. Please try another.")
+              }
+              else{
+                usersRef.set({
+                  first: document.getElementById('first').value,
+                  last: document.getElementById('last').value,
+                  bio: document.getElementById('bio').value,
+                  password: document.getElementById('password').value,
+                  avatar: "https://images.unsplash.com/photo-1604082668028-1373f1071a07?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                })
+                .then(() => {
+                  console.log("Document successfully written!");
+                  localStorage.setItem('user', document.getElementById('username').value)
+                  localStorage.setItem('avatar', usersRef.avatar)
+                  window.location.replace("/home.html")
+                })
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                })
+              }
+          })
         }
       }
     })
