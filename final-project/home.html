@@ -6,6 +6,33 @@
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <!-- Source Firebase Library from the Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <!-- Source Cloud Firestore from the Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+    </script>
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXh-S-D5ECvCUpp_Hx2b_qouifkw8CjKw",
+      authDomain: "shopping-list-v1-4a3ce.firebaseapp.com",
+      projectId: "shopping-list-v1-4a3ce",
+      storageBucket: "shopping-list-v1-4a3ce.appspot.com",
+      messagingSenderId: "163789002678",
+      appId: "1:163789002678:web:787dba4574d5720810d317",
+      measurementId: "G-V9Y712XY3W"
+    };
+
+    firebase.initializeApp(firebaseConfig)
+
+    // make sure to initizalize cloud firestore
+    var db = firebase.firestore()
+
+  </script>
 </head>
 <body>
   <div id="app">
@@ -19,8 +46,8 @@
               class="hidden-sm-and-down"
             >
               <v-container class="py-0 fill-height" >
-                <img class="mr-5" width="40" src="img/logo3.png" alt="Carrier Pigeon Logo">
-                <h2 style="color: #2B81D6;">Carrier Pigeon</h2>
+                <a href="home.html" style="text-decoration:none"><h2 style="color: #2B81D6;">Carrier Pigeon</h2></a>
+                <a href="home.html"><img class="ml-2" width="40" src="img/logo3.png" alt="Carrier Pigeon Logo"></a>
                 <v-spacer></v-spacer>
                 <v-btn
                 text style="color: #2B81D6;"
@@ -36,18 +63,8 @@
                 text
                 href="pigeon.html"
               >
-                PIGEON
+                MESSAGES
               </v-btn>
-                <v-spacer></v-spacer>
-                <v-responsive max-width="260">
-                  <v-text-field 
-                    dense
-                    flat
-                    hide-details
-                    rounded
-                    solo-inverted
-                  ></v-text-field>
-                </v-responsive>
               </v-container>
          </v-app-bar>
          <v-app-bar
@@ -59,8 +76,9 @@
          class="hidden-md-and-up"
          >
           <v-container class="py-0 fill-height">
-          <img class="mr-5" width="40" src="img/logo3.png" alt="Carrier Pigeon Logo">
-          <h2 style="color: #2B81D6;">Carrier Pigeon</h2>
+          <a href="home.html" style="text-decoration:none"><h2 style="color: #2B81D6;">Carrier Pigeon</h2></a>
+          <a href="home.html"><img class="ml-2" width="40" src="img/logo3.png" alt="Carrier Pigeon Logo"></a>
+          
           <v-spacer></v-spacer>
           <v-menu
             top
@@ -78,7 +96,7 @@
             </template>
       
             <v-list>
-              <v-list-item class="justify-center">
+              <v-list-item>
               <v-btn
               text style="color: #2B81D6;">
               HOME
@@ -96,7 +114,7 @@
                   text
                   href="pigeon.html"
                   >
-                  PIGEON
+                  MESSAGES
                   </v-btn>
                   </v-list-item>
               </v-list>
@@ -108,21 +126,43 @@
         
             <v-main class="pt-0" style="background: url('img/Cloudy2.svg') no-repeat center center fixed; background-size:cover">
               <v-container class="pt-10">
-                <v-row class="pt-10">
-                  <v-col>
+                <v-spacer id="top" class="pt-10"></v-spacer>
+                <v-card
+                    class="mx-auto mt-5 mb-5 pa-5"
+                    color="#fff"
+                    max-width="600"
+                  >
+                  <v-form>
+                    <h3 style="color: #2B81D6;">Compose Post</h3>
+                    <v-textarea id="compose-box"
+                      rows="3"
+                      color="primary"
+                      :rules="[v => (v || '' ).length <= 200 || 'Post must be 200 characters or less']"
+                      class="pb-2"
+                      placeholder=""
+                      v-model="new_pigeon.message"
+                    >
+                    </v-textarea>
+                    <v-btn @click="newPigeon()" rounded color="primary" x-large block dark>Send Carrier Pigeon<v-icon class="pl-2">mdi-bird</v-icon></v-btn>
+                  </v-form>
+                  </v-card>
+                <v-row >
+                  <v-col 
+                  >
+                  <h3 class="text-center" style="color: #fff;">Pigeon Posts</h3>
                     <v-card
                     class="mx-auto mt-5 mb-5"
                     color="#fff"
                     dark
                     max-width="600"
-                    
+                    v-for="item in pigeon" :key="item.id"
                   >
                     
-                    <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                      "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
+                    <v-card-text style="color:#242424" class="text-h5 font-weight-bold pb-1">
+                      {{item.message}}
                     </v-card-text>
                     <v-card-text class="pt-0 pb-0" style="color:#949494">
-                      March 15, 2022
+                      {{item.createdon}}
                     </v-card-text>
                     <v-card-actions>
                       <v-list-item class="grow">
@@ -135,178 +175,29 @@
                         </v-list-item-avatar>
                 
                         <v-list-item-content>
-                          <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
+                          <v-list-item-title style="color:#242424">                          {{item.username}}
+                          </v-list-item-title>
                         </v-list-item-content>
                 
                         <v-row
                           align="center"
                           justify="end"
                         >
-                          <v-icon style="color: #dbdbdb;" class="mr-1">
+                        <v-btn @click="heartPigeon(item)" style="background-color:#fff;" elevation="0" class="pr-0">
+                          <v-icon v-if="isitHearted(item)" style="color: #2B81D6;" class="mr-1">
                             mdi-heart
                           </v-icon>
-                          <span class="subheading mr-2" style="color:#242424">256</span>
+                          <v-icon v-else style="color: #dbdbdb;" class="mr-1">
+                            mdi-heart
+                          </v-icon>
+                        </v-btn>
+                          <span class="subheading mr-2" style="color:#242424">{{item.heartslength}}</span>
                         </v-row>
                       </v-list-item>
                     </v-card-actions>
                   </v-card>
-                  <v-card
-                    class="mx-auto mt-5 mb-5"
-                    color="#fff"
-                    dark
-                    max-width="600"
-                    
-                  >
-                    
-                    <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                      "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-                    </v-card-text>
-                    <v-card-text class="pt-0 pb-0" style="color:#949494">
-                      March 15, 2022
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-list-item class="grow">
-                        <v-list-item-avatar color="grey darken-3">
-                          <v-img
-                            class="elevation-6"
-                            alt=""
-                            src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                          ></v-img>
-                        </v-list-item-avatar>
-                
-                        <v-list-item-content>
-                          <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                        </v-list-item-content>
-                
-                        <v-row
-                          align="center"
-                          justify="end"
-                        >
-                          <v-icon style="color: #2B81D6;" class="mr-1">
-                            mdi-heart
-                          </v-icon>
-                          <span class="subheading mr-2" style="color:#242424">256</span>
-                        </v-row>
-                      </v-list-item>
-                    </v-card-actions>
-                  </v-card><v-card
-                  class="mx-auto mt-5 mb-5"
-                  color="#fff"
-                  dark
-                  max-width="600"
                   
-                >
                   
-                  <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                    "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-                  </v-card-text>
-                  <v-card-text class="pt-0 pb-0" style="color:#949494">
-                    March 15, 2022
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-list-item class="grow">
-                      <v-list-item-avatar color="grey darken-3">
-                        <v-img
-                          class="elevation-6"
-                          alt=""
-                          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                        ></v-img>
-                      </v-list-item-avatar>
-              
-                      <v-list-item-content>
-                        <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                      </v-list-item-content>
-              
-                      <v-row
-                        align="center"
-                        justify="end"
-                      >
-                        <v-icon style="color: #2B81D6;" class="mr-1">
-                          mdi-heart
-                        </v-icon>
-                        <span class="subheading mr-2" style="color:#242424">256</span>
-                      </v-row>
-                    </v-list-item>
-                  </v-card-actions>
-                </v-card><v-card
-                class="mx-auto mt-5 mb-5"
-                color="#fff"
-                dark
-                max-width="600"
-                
-              >
-                
-                <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                  "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-                </v-card-text>
-                <v-card-text class="pt-0 pb-0" style="color:#949494">
-                  March 15, 2022
-                </v-card-text>
-                <v-card-actions>
-                  <v-list-item class="grow">
-                    <v-list-item-avatar color="grey darken-3">
-                      <v-img
-                        class="elevation-6"
-                        alt=""
-                        src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                      ></v-img>
-                    </v-list-item-avatar>
-            
-                    <v-list-item-content>
-                      <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                    </v-list-item-content>
-            
-                    <v-row
-                      align="center"
-                      justify="end"
-                    >
-                      <v-icon style="color: #dbdbdb;" class="mr-1">
-                        mdi-heart
-                      </v-icon>
-                      <span class="subheading mr-2" style="color:#242424">256</span>
-                    </v-row>
-                  </v-list-item>
-                </v-card-actions>
-              </v-card><v-card
-              class="mx-auto mt-5 mb-5"
-              color="#fff"
-              dark
-              max-width="600"
-              
-            >
-              
-              <v-card-text style="color:#242424" class="text-h5 font-weight-bold">
-                "Turns out semicolon-less style is easier and safer in TS because most gotcha edge cases are type invalid as well."
-              </v-card-text>
-              <v-card-text class="pt-0 pb-0" style="color:#949494">
-                March 15, 2022
-              </v-card-text>
-              <v-card-actions>
-                <v-list-item class="grow">
-                  <v-list-item-avatar color="grey darken-3">
-                    <v-img
-                      class="elevation-6"
-                      alt=""
-                      src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-                    ></v-img>
-                  </v-list-item-avatar>
-          
-                  <v-list-item-content>
-                    <v-list-item-title style="color:#242424">Evan You</v-list-item-title>
-                  </v-list-item-content>
-          
-                  <v-row
-                    align="center"
-                    justify="end"
-                  >
-                    <v-icon style="color: #2B81D6;" class="mr-1">
-                      mdi-heart
-                    </v-icon>
-                    <span class="subheading mr-2" style="color:#242424">256</span>
-                  </v-row>
-                </v-list-item>
-              </v-card-actions>
-            </v-card>
                     
                   </v-col>
                 </v-row>
@@ -318,6 +209,7 @@
                     right
                     fixed
                     class="mr-8 mb-5"
+                    @click="$vuetify.goTo('#top')"
                   >
                     <v-icon style="color: #2B81D6;">mdi-bird</v-icon>
                   </v-btn>
@@ -336,19 +228,103 @@
       data: function() {
         return {
           app_title:"Fun Vuetify App",
+          isHearted: false,
           items: [
         { title: 'HOME' },
         { title: 'PROFILE' },
         { title: 'PIGEON' },
       ],
+      new_pigeon: {
+        createdon: "",
+        hearts: "",
+        message: "",
+        username: ""
+      },
+      pigeon: [],
       closeOnClick: true,
           
         }
       },
       methods:{
-        addTask(){
-          console.log('hi')
+        newPigeon:function(){
+          db.collection("pigeons").add({
+              createdon: new Date(),
+              hearts: [],
+              heartslength: 0,
+              isHearted: false,
+              message: this.new_pigeon.message,
+              username: "test",
+          })
+          .then(() => {
+              console.log("Document successfully written!");
+          })
+          .catch((error) => {
+              console.error("Error writing document: ", error);
+          });
+          this.new_pigeon.message = ""
+        },
+        getPigeons(){
+          db.collection("pigeons")
+            .onSnapshot((querySnapshot) => {
+              this.pigeon = []
+              querySnapshot.forEach((doc) =>
+              this.pigeon.push({
+                createdon:(doc.data().createdon).toDate().toDateString(),
+                hearts:doc.data().hearts,
+                heartslength:(doc.data().hearts).length,
+                message:doc.data().message,
+                username:doc.data().username,
+                isHearted:doc.data().isHearted,
+                id:doc.id
+              }))
+            })
+        },
+        heartPigeon:function(data) {
+          let docId = data.id;
+          var docRef = db.collection("pigeons").doc(docId);
+          if ((data.hearts).indexOf("anotherheart") > -1){
+            return docRef.update({
+              hearts:firebase.firestore.FieldValue.arrayRemove("anotherheart"),
+              heartslength:data.heartslength - 1,
+              isHearted: false
+            })
+            .then(() => {
+                console.log("Document successfully updated!");
+            })
+            .catch((error) => {
+                console.error("Error updating document: ", error);
+            });
+            
+          }
+          else{
+            return docRef.update({
+              hearts:firebase.firestore.FieldValue.arrayUnion("anotherheart"),
+              heartslength:data.heartslength + 1,
+              isHearted: true
+            })
+            .then(() => {
+                console.log("Document successfully updated!");
+            })
+            .catch((error) => {
+                console.error("Error updating document: ", error);
+            });
+          }
+          },
+          isitHearted:function(data){
+            return data.isHearted
+        },
+        getPlaceholder(){
+          var list = ['To write is human, to receive a letter: Divine!', 'some letters one really writes to oneself; some letters just describe what it is we hope will be returned.', 'Don’t be afraid of being outnumbered. Eagles fly alone. Pigeons flock together.','Compare sending someone a text message and getting a love letter delivered by carrier pigeon. No contest.','One day I will find the right words, and they will be simple.','You never have to change anything you got up in the middle of the night to write',
+        "One day you're the statue. One day you're the pigeon.",'No bird soars too high if he soars with his own wings.','Tame birds sing of freedom. Wild birds fly.']
+          var r = Math.floor(Math.random() * list.length);
+          document.getElementById('compose-box').setAttribute('placeholder',list[r])
+
+
         }
+      },
+      mounted(){
+        this.getPigeons()
+        this.getPlaceholder()
       }
     })
 
