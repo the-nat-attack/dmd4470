@@ -257,7 +257,17 @@
               isHearted:doc.data().isHearted,
               id:doc.id
             }))
-          })
+            this.pigeon.forEach(function(element) {
+              if ((element.hearts).indexOf(localStorage.getItem('user')) > -1){
+                console.log(element.hearts)
+                element['isHearted'] = true
+              }
+              else{
+                element['isHearted'] = false
+              }
+              }
+              )
+          })    
       },
       getBio(){
         var docRef = db.collection("users").doc(localStorage.getItem('user'));

@@ -284,6 +284,16 @@
                 id:doc.id,
                 avatar:doc.data().avatar
               }))
+              this.pigeon.forEach(function(element) {
+              if ((element.hearts).indexOf(localStorage.getItem('user')) > -1){
+                console.log(element.hearts)
+                element['isHearted'] = true
+              }
+              else{
+                element['isHearted'] = false
+              }
+              }
+              )
             })
         },
         getAvatar(data){
