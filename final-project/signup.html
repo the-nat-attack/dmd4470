@@ -11,11 +11,6 @@
   <!-- Source Cloud Firestore from the Google CDN -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-    </script>
-  <script>
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
       apiKey: "AIzaSyCXh-S-D5ECvCUpp_Hx2b_qouifkw8CjKw",
@@ -119,6 +114,19 @@
         }
       },
       methods:{
+        getImage(){
+          const requestUrl = 'https://api.unsplash.com/search/photos/?page=1&per_page=30&query=pigeon&client_id=mzpv7J7ofTLSw_QMatMMB3FHgVZ8ZVxQsh7wtNIEu28';
+          fetch(requestUrl)
+              .then((response) => response.json())
+              .then((data) => {
+                let allImages = data.results[Math.floor(Math.random() * data.results.length)];
+                localStorage.setItem('pigeon_avatar',allImages.urls.regular)
+                console.log(allImages.urls.regular)
+              })
+              .catch(error => {
+                console.log("Error retrieving image.") 
+              });
+        },
         makeAccount(){
           const usersRef = db.collection("users").doc(document.getElementById('username').value)
           usersRef.get()
@@ -132,12 +140,12 @@
                   last: document.getElementById('last').value,
                   bio: document.getElementById('bio').value,
                   password: document.getElementById('password').value,
-                  avatar: "https://images.unsplash.com/photo-1604082668028-1373f1071a07?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                  avatar: localStorage.getItem('pigeon_avatar')
+
                 })
                 .then(() => {
                   console.log("Document successfully written!");
-                  localStorage.setItem('user', document.getElementById('username').value)
-                  localStorage.setItem('avatar', usersRef.avatar)
+                  localStorage.setItem('pigeon_user', document.getElementById('username').value)
                   window.location.replace("home.html")
                 })
                 .catch((error) => {
@@ -146,7 +154,12 @@
               }
           })
         }
-      }
+      },
+      mounted(){
+        this.getImage()
+      } 
+        
+      
     })
   </script>
 </body>

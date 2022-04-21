@@ -62,9 +62,9 @@
               </v-btn>
               <v-btn
                 text
-                href="pigeon.html"
+                @click="logout()"
               >
-                MESSAGES
+                LOGOUT
               </v-btn>
               </v-container>
         </v-app-bar>
@@ -114,9 +114,9 @@
                 <v-list-item>
                   <v-btn
                   text
-                  href="pigeon.html"
+                  @click="logout()"
                   >
-                  MESSAGES
+                  LOGOUT
                   </v-btn>
                   </v-list-item>
               </v-list>
@@ -244,7 +244,7 @@
     },
     methods:{
       getPigeons(){
-        db.collection("pigeons").where("username", "==", localStorage.getItem('user'))
+        db.collection("pigeons").where("username", "==", localStorage.getItem('pigeon_user'))
           .onSnapshot((querySnapshot) => {
             this.pigeon = []
             querySnapshot.forEach((doc) =>
@@ -258,7 +258,7 @@
               id:doc.id
             }))
             this.pigeon.forEach(function(element) {
-              if ((element.hearts).indexOf(localStorage.getItem('user')) > -1){
+              if ((element.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
                 console.log(element.hearts)
                 element['isHearted'] = true
               }
@@ -269,8 +269,12 @@
               )
           })    
       },
+      logout:function(){
+          localStorage.clear()
+          window.location.replace("index.html")
+        },
       getBio(){
-        var docRef = db.collection("users").doc(localStorage.getItem('user'));
+        var docRef = db.collection("users").doc(localStorage.getItem('pigeon_user'));
         docRef.get().then((doc) => {
             this.firstname = doc.data().first,
             this.lastname = doc.data().last,
@@ -291,9 +295,9 @@
       heartPigeon:function(data) {
           let docId = data.id;
           var docRef = db.collection("pigeons").doc(docId);
-          if ((data.hearts).indexOf(localStorage.getItem('user')) > -1){
+          if ((data.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
             return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayRemove(localStorage.getItem('user')),
+              hearts:firebase.firestore.FieldValue.arrayRemove(localStorage.getItem('pigeon_user')),
               heartslength:data.heartslength - 1,
               isHearted: false
             })
@@ -307,7 +311,7 @@
           }
           else{
             return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayUnion(localStorage.getItem('user')),
+              hearts:firebase.firestore.FieldValue.arrayUnion(localStorage.getItem('pigeon_user')),
               heartslength:data.heartslength + 1,
               isHearted: true
             })
@@ -326,6 +330,22 @@
     mounted(){
       this.getPigeons()
       this.getBio()
+      if (localStorage.getItem('pigeon_user') === null){
+          window.location.replace("index.html")
+        }
+        else{
+          console.log('huh')
+          var docRef = db.collection("users").doc(localStorage.getItem('pigeon_user'));
+          docRef.get().then((doc) => {
+          if (doc.exists){
+            console.log('logged in')
+          }
+          else{
+            window.location.replace("index.html")
+          }
+        
+        })
+        }
     }
   })
 

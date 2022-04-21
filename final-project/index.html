@@ -109,8 +109,8 @@
           docRef.get().then((doc) => {
             if (doc.exists){
               if (document.getElementById('password').value === doc.data().password){
-                localStorage.setItem('user', document.getElementById('username').value)
-                localStorage.setItem('avatar', doc.data().avatar)
+                localStorage.setItem('pigeon_user', document.getElementById('username').value)
+                localStorage.setItem('pigeon_avatar', doc.data().avatar)
                 window.location.replace("home.html")
               }
               else{

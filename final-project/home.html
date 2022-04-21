@@ -11,11 +11,6 @@
   <!-- Source Cloud Firestore from the Google CDN -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-    </script>
-  <script>
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
       apiKey: "AIzaSyCXh-S-D5ECvCUpp_Hx2b_qouifkw8CjKw",
@@ -253,8 +248,8 @@
               heartslength: 0,
               isHearted: false,
               message: this.new_pigeon.message,
-              username: localStorage.getItem('user'),
-              avatar: localStorage.getItem('avatar')
+              username: localStorage.getItem('pigeon_user'),
+              avatar: localStorage.getItem('pigeon_avatar')
           })
           .then(() => {
               console.log("Document successfully written!");
@@ -289,7 +284,7 @@
                 avatar:doc.data().avatar
               }))
               this.pigeon.forEach(function(element) {
-              if ((element.hearts).indexOf(localStorage.getItem('user')) > -1){
+              if ((element.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
                 console.log(element.hearts)
                 element['isHearted'] = true
               }
@@ -306,9 +301,9 @@
         heartPigeon:function(data) {
           let docId = data.id;
           var docRef = db.collection("pigeons").doc(docId);
-          if ((data.hearts).indexOf(localStorage.getItem('user')) > -1){
+          if ((data.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
             return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayRemove(localStorage.getItem('user')),
+              hearts:firebase.firestore.FieldValue.arrayRemove(localStorage.getItem('pigeon_user')),
               heartslength:data.heartslength - 1,
               isHearted: false
             })
@@ -322,7 +317,7 @@
           }
           else{
             return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayUnion(localStorage.getItem('user')),
+              hearts:firebase.firestore.FieldValue.arrayUnion(localStorage.getItem('pigeon_user')),
               heartslength:data.heartslength + 1,
               isHearted: true
             })
@@ -350,12 +345,12 @@
         this.getPigeons()
         this.getPlaceholder()
         
-        if (localStorage.getItem('user') === null){
+        if (localStorage.getItem('pigeon_user') === null){
           window.location.replace("index.html")
         }
         else{
           console.log('huh')
-          var docRef = db.collection("users").doc(localStorage.getItem('user'));
+          var docRef = db.collection("users").doc(localStorage.getItem('pigeon_user'));
           docRef.get().then((doc) => {
           if (doc.exists){
             console.log('logged in')
