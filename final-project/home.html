@@ -61,9 +61,9 @@
               </v-btn>
               <v-btn
                 text
-                href="pigeon.html"
+                @click="logout()"
               >
-                MESSAGES
+                LOGOUT
               </v-btn>
               </v-container>
          </v-app-bar>
@@ -112,9 +112,9 @@
                 <v-list-item>
                   <v-btn
                   text
-                  href="pigeon.html"
+                  @click="logout()"
                   >
-                  MESSAGES
+                  LOGOUT
                   </v-btn>
                   </v-list-item>
               </v-list>
@@ -269,6 +269,10 @@
           
           this.new_pigeon.message = ""
         },
+        logout:function(){
+          localStorage.clear()
+          window.location.replace("index.html")
+        },
         getPigeons(){
           db.collection("pigeons").orderBy("createdon", "desc")
             .onSnapshot((querySnapshot) => {
@@ -345,7 +349,25 @@
       mounted(){
         this.getPigeons()
         this.getPlaceholder()
-      }
+        
+        if (localStorage.getItem('user') === null){
+          window.location.replace("index.html")
+        }
+        else{
+          console.log('huh')
+          var docRef = db.collection("users").doc(localStorage.getItem('user'));
+          docRef.get().then((doc) => {
+          if (doc.exists){
+            console.log('logged in')
+          }
+          else{
+            window.location.replace("index.html")
+          }
+        
+        })
+        }
+          
+        }
     })
 
     
