@@ -286,7 +286,7 @@
               this.pigeon = []
               querySnapshot.forEach((doc) =>
               this.pigeon.push({
-                createdon:(doc.data().createdon).toDate().toDateString(),
+                createdon:(doc.data().createdon).toDate().toString(),
                 hearts:doc.data().hearts,
                 heartslength:(doc.data().hearts).length,
                 message:doc.data().message,
@@ -361,7 +361,6 @@
           window.location.replace("index.html")
         }
         else{
-          console.log('huh')
           var docRef = db.collection("users").doc(localStorage.getItem('pigeon_user'));
           docRef.get().then((doc) => {
           if (doc.exists){

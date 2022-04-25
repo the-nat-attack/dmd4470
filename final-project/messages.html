@@ -344,7 +344,6 @@
           window.location.replace("index.html")
         }
         else{
-          console.log('huh')
           var docRef = db.collection("users").doc(localStorage.getItem('pigeon_user'));
           docRef.get().then((doc) => {
           if (doc.exists){
