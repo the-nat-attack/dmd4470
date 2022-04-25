@@ -2,6 +2,11 @@
 <html class="no-js" lang="">
 
 <head>
+    <meta charset="utf-8">
+  <title>Messages</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -10,11 +15,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <!-- Source Cloud Firestore from the Google CDN -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
-      }
-      </script>
     <script>
       // For Firebase JS SDK v7.20.0 and later, measurementId is optional
       const firebaseConfig = {
@@ -150,15 +150,15 @@
               <v-card elevation="4" class="rounded-xl pa-4" >
                 <v-card-text>
                 <v-form>
-                  <v-text-field id="to" label="Pigeon Destination" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
-                  <v-textarea id="message" prepend-inner-icon="mdi-text" outlined rounded label="Message" id="compose-box"
+                  <v-text-field v-model="new_message.to" label="Pigeon Destination" name="email" prepend-inner-icon="mdi-account" type="text" rounded outlined></v-text-field>
+                  <v-textarea v-model="new_message.message" prepend-inner-icon="mdi-text" outlined rounded label="Message" id="compose-box"
                     rows="3"
                     color="primary"
                     :rules="[v => (v || '' ).length <= 200 || 'Bio must be 200 characters or less']"
                     placeholder=""
                   >
                   </v-textarea>
-                  <v-btn @click="makeAccount()" rounded color="primary" x-large block dark>Send direct pigeon</v-btn>
+                  <v-btn @click="newMessage()" rounded color="primary" x-large block dark>Send direct pigeon</v-btn>
                 </v-form>
               </v-card-text>
               
@@ -174,40 +174,40 @@
                   color="#fff"
                   dark
                   max-width="600"
-                  v-for="item in pigeon" :key="item.id"
+                  v-for="item in messages" :key="item.id"
                 >
+                <v-card-actions>
+                    <v-list-item-avatar color="grey darken-3">
+                        <v-img
+                          class="elevation-6"
+                          alt=""
+                          v-bind:src="getAvatar(item)"
+                        ></v-img>
+                      </v-list-item-avatar>
+                      <v-card-text style="color:#242424; font-size:18px;" class="pl-0 pb-0 pt-0">
+                        {{item.from}}
+                      </v-card-text>
+                      <v-card-text class="pt-0 pb-0 " style="color:#949494; text-align:right">
+                        {{item.createdon}}
+                      </v-card-text>
+                </v-card-actions>
+                
+
                   
-                  <v-card-text style="color:#242424" class="text-h5 font-weight-bold pb-1">
+                  <v-card-text style="color:#242424" class="text-h5 font-weight-bold pb-2 pt-0">
                     {{item.message}}
-                  </v-card-text>
-                  <v-card-text class="pt-0 pb-0" style="color:#949494">
-                    {{item.createdon}}
                   </v-card-text>
                   <v-card-actions>
                     <v-list-item class="grow pl-2">
                       <v-btn
                     color="red"
                     depressed
-                    @click="deletePigeon(item)"
+                    @click="deleteMessage(item)"
                   >
                   <v-icon style="color:white" left>mdi-trash-can</v-icon>
                     Delete
                   </v-btn>
               
-                      <v-row
-                        align="center"
-                        justify="end"
-                      >
-                      <v-btn @click="heartPigeon(item)" style="background-color:#fff;" elevation="0" class="pr-0">
-                        <v-icon v-if="isitHearted(item)" style="color: #2B81D6;" class="mr-1">
-                          mdi-heart
-                        </v-icon>
-                        <v-icon v-else style="color: #dbdbdb;" class="mr-1">
-                          mdi-heart
-                        </v-icon>
-                      </v-btn>
-                        <span class="subheading mr-2" style="color:#242424">{{item.heartslength}}</span>
-                      </v-row>
                     </v-list-item>
                   </v-card-actions>
                 </v-card>
@@ -230,116 +230,72 @@
     vuetify: new Vuetify(),
     data: function() {
       return {
-        app_title:"Fun Vuetify App",
-        isHearted: false,
-          firstname:"",
-          lastname:"",
-          bio:"",
-          avatar:"",
-        items: [
-      { title: 'HOME' },
-      { title: 'PROFILE' },
-      { title: 'PIGEON' },
-    ],
-    new_pigeon: {
-      createdon: "",
-      hearts: "",
+    new_message: {
+      to: "",
+      from: "",
       message: "",
-      username: ""
+      createdon: "",
+      avatar: ""
     },
-    pigeon: [],
+    messages: [],
     closeOnClick: true,
         
       }
     },
     methods:{
-      getPigeons(){
-        db.collection("pigeons").where("username", "==", localStorage.getItem('pigeon_user'))
+        newMessage:function(){
+          if (this.new_message.message.length > 0){
+            db.collection("messages").add({
+              createdon: new Date(),
+              message: this.new_message.message,
+              to: this.new_message.to,
+              from: localStorage.getItem('pigeon_user'),
+              avatar: localStorage.getItem('pigeon_avatar')
+          })
+          .then(() => {
+              console.log("Document successfully written!");
+          })
+          .catch((error) => {
+              console.error("Error writing document: ", error);
+          });
+          }
+          else{
+            alert("Carrier Pigeons can't send empty messages!")
+          }
+          this.new_message.to=""
+          this.new_message.message = ""
+        },
+      getMessages(){
+        db.collection("messages").where("to", "==", localStorage.getItem('pigeon_user'))
           .onSnapshot((querySnapshot) => {
-            this.pigeon = []
+            this.messages = []
             querySnapshot.forEach((doc) =>
-            this.pigeon.push({
+            this.messages.push({
               createdon:(doc.data().createdon).toDate().toDateString(),
-              hearts:doc.data().hearts,
-              heartslength:(doc.data().hearts).length,
               message:doc.data().message,
-              username:doc.data().username,
-              isHearted:doc.data().isHearted,
-              id:doc.id
+              from:doc.data().from,
+              id:doc.id,
+              avatar:doc.data().avatar
             }))
-            this.pigeon.forEach(function(element) {
-              if ((element.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
-                console.log(element.hearts)
-                element['isHearted'] = true
-              }
-              else{
-                element['isHearted'] = false
-              }
-              }
-              )
           })    
       },
       logout:function(){
           localStorage.clear()
           window.location.replace("index.html")
         },
-      getBio(){
-        var docRef = db.collection("users").doc(localStorage.getItem('pigeon_user'));
-        docRef.get().then((doc) => {
-            this.firstname = doc.data().first,
-            this.lastname = doc.data().last,
-            this.bio = doc.data().bio,
-            this.avatar = doc.data().avatar
-        })
+      getAvatar(data){
+        return data.avatar
       },
-      getAvatar:function(){
-        return this.avatar
-      },
-      deletePigeon:function(data){
-        db.collection("pigeons").doc(data.id).delete().then(() => {
+      deleteMessage:function(data){
+        db.collection("messages").doc(data.id).delete().then(() => {
             console.log("Document successfully deleted!");
         }).catch((error) => {
             console.error("Error removing document: ", error);
         });
-      },
-      heartPigeon:function(data) {
-          let docId = data.id;
-          var docRef = db.collection("pigeons").doc(docId);
-          if ((data.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
-            return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayRemove(localStorage.getItem('pigeon_user')),
-              heartslength:data.heartslength - 1,
-              isHearted: false
-            })
-            .then(() => {
-                console.log("Document successfully updated!");
-            })
-            .catch((error) => {
-                console.error("Error updating document: ", error);
-            });
-            
-          }
-          else{
-            return docRef.update({
-              hearts:firebase.firestore.FieldValue.arrayUnion(localStorage.getItem('pigeon_user')),
-              heartslength:data.heartslength + 1,
-              isHearted: true
-            })
-            .then(() => {
-                console.log("Document successfully updated!");
-            })
-            .catch((error) => {
-                console.error("Error updating document: ", error);
-            });
-          }
-          },
-        isitHearted:function(data){
-          return data.isHearted
       }
     },
     mounted(){
-      this.getPigeons()
-      this.getBio()
+      this.getMessages()
       if (localStorage.getItem('pigeon_user') === null){
           window.location.replace("index.html")
         }
