@@ -67,6 +67,7 @@
               <v-btn
                 text
                 @click="logout()"
+                style="background-color:#2B81D6; color:white;"
               >
                 LOGOUT
               </v-btn>
@@ -125,6 +126,7 @@
                   <v-btn
                   text
                   @click="logout()"
+                  style="background-color:#2B81D6; color:white;"
                   >
                   LOGOUT
                   </v-btn>
@@ -302,7 +304,6 @@
               }))
               this.pigeon.forEach(function(element) {
               if ((element.hearts).indexOf(localStorage.getItem('pigeon_user')) > -1){
-                console.log(element.hearts)
                 element['isHearted'] = true
               }
               else{
