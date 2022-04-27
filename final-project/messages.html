@@ -244,27 +244,42 @@
     },
     methods:{
         newMessage:function(){
-          if (this.new_message.message.length > 0){
-            db.collection("messages").add({
-              createdon: new Date(),
-              message: this.new_message.message,
-              to: this.new_message.to,
-              from: localStorage.getItem('pigeon_user'),
-              avatar: localStorage.getItem('pigeon_avatar')
-          })
-          .then(() => {
-              console.log("Document successfully written!");
-          })
-          .catch((error) => {
-              console.error("Error writing document: ", error);
-          });
-          }
-          else{
-            alert("Carrier Pigeons can't send empty messages!")
-          }
-          this.new_message.to=""
-          this.new_message.message = ""
-        },
+            if (this.new_message.to.length > 0){
+            const usersRef = db.collection("users").doc(this.new_message.to)
+            usersRef.get()
+            .then ((docSnapshot) => {
+                if (docSnapshot.exists){
+                    if (this.new_message.message.length > 0){
+                        db.collection("messages").add({
+                        createdon: new Date(),
+                        message: this.new_message.message,
+                        to: this.new_message.to,
+                        from: localStorage.getItem('pigeon_user'),
+                        avatar: localStorage.getItem('pigeon_avatar')
+                        })
+                        .then(() => {
+                            console.log("Document successfully written!");
+                            this.new_message.to=""
+                            this.new_message.message = ""
+                        })
+                        .catch((error) => {
+                            console.error("Error writing document: ", error);
+                        });
+                        }
+                        else{
+                            alert("Carrier Pigeons can't send empty messages!")
+                        }
+                        
+                }
+                else{
+                    alert("The Pigeons can't find this home!")
+                }
+            })
+            }
+            else{
+                alert("The Pigeons must know where to go!")
+            }
+        },    
       getMessages(){
         db.collection("messages").where("to", "==", localStorage.getItem('pigeon_user'))
           .onSnapshot((querySnapshot) => {
