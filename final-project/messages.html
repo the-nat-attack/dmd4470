@@ -168,17 +168,26 @@
                     placeholder=""
                   >
                   </v-textarea>
-                  <v-btn @click="newMessage()" rounded color="primary" x-large block dark>Send direct pigeon</v-btn>
+                  <v-btn @click="newMessage()" rounded color="primary" x-large block dark>Send direct pigeon<v-icon class="pl-2">mdi-email</v-icon></v-btn>
                 </v-form>
               </v-card-text>
               
             </v-card>
             </v-col>
             </v-row>
-              <v-row >
+              <v-row style="text-align:center;">
+                <v-col>
+                <v-btn @click="getMessages()" v-if="showSent()" class="text-center" style="border: 2px solid white; color:#fff; background-color:transparent;">My Messages</v-btn>
+                <v-btn @click="getMessages()" v-else class="text-center" style="color:#2B81D6">My Messages</v-btn>
+
+                <v-btn @click="getSentMessages()" v-if="showSent()" class="text-center" style="color:#2B81D6">Sent Messages</v-btn>
+                <v-btn @click="getSentMessages()" v-else class="text-center" style="border: 2px solid white; color:#fff; background-color:transparent;">Sent Messages</v-btn>
+              </v-col>
+              </v-row>
+                <v-row>
                 <v-col 
                 >
-                <h3 class="text-center" style="color: #fff;">My Messages</h3>
+                
                   <v-card
                   class="mx-auto mt-5 mb-5"
                   color="#fff"
@@ -187,14 +196,20 @@
                   v-for="item in messages" :key="item.id"
                 >
                 <v-card-actions>
-                    <v-list-item-avatar color="grey darken-3">
-                        <v-img
-                          class="elevation-6"
-                          alt=""
-                          v-bind:src="getAvatar(item)"
-                        ></v-img>
+                    <v-list-item-avatar v-if="showSent()" style="opacity:0; display:none;">
+                        
                       </v-list-item-avatar>
-                      <v-card-text style="color:#242424; font-size:18px;" class="pl-0 pb-0 pt-0">
+                      <v-list-item-avatar v-else>
+                        <v-img
+                        class="elevation-6"
+                        alt=""
+                        v-bind:src="getAvatar(item)"
+                      ></v-img>
+                      </v-list-item-avatar>
+                      <v-card-text  v-if="showSent()" style="color:#242424; font-size:18px;" class="pl-2 pb-3 pt-3">
+                        To: {{item.from}}
+                      </v-card-text>
+                      <v-card-text  v-else style="color:#242424; font-size:18px;" class="pl-0 pb-0 pt-0">
                         {{item.from}}
                       </v-card-text>
                       <v-card-text class="pt-0 pb-0 " style="color:#949494; text-align:right">
@@ -261,6 +276,7 @@
     },
     items: [
       ],
+    show: false,
     messages: [],
     closeOnClick: true,
         
@@ -316,7 +332,26 @@
               id:doc.id,
               avatar:doc.data().avatar
             }))
-          })    
+          })   
+        this.show = false 
+      },
+      getSentMessages(){
+        db.collection("messages").where("from", "==", localStorage.getItem('pigeon_user'))
+          .onSnapshot((querySnapshot) => {
+            this.messages = []
+            querySnapshot.forEach((doc) =>
+            this.messages.push({
+              createdon:(doc.data().createdon).toDate().toDateString(),
+              message:doc.data().message,
+              from:doc.data().to,
+              id:doc.id
+           }))
+          }) 
+        this.show = true
+      },
+      showSent:function(){
+        console.log(this.show)
+        return this.show
       },
       logout:function(){
           localStorage.clear()
